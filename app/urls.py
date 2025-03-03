@@ -8,7 +8,8 @@ urlpatterns=[
     path('signin/',signInView,name='signin'),
     path('home/',homeView,name='home'),
     path('loggout/',logOutView,name='logout'),
-    path('updatepic/<int:id>/',updatePicView,name='update')
+    path('updatepic/<int:id>/',updatePicView,name='update'),
+    path('updatepwd/',updatePasswordView,name='updatepwd')
 ]
 
 if settings.DEBUG:

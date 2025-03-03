@@ -3,7 +3,7 @@ from django.contrib import messages
 from .models import CustomUserModel
 from .forms import CustomUserForm
 from django.http import HttpResponse
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm,PasswordChangeForm
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 # Create your views here.
@@ -52,7 +52,20 @@ def updatePicView(request,id):
         fm=CustomUserForm(instance=user)
     return render(request,'update.html',{'form':fm})
 
-
+@login_required(login_url='/signin/')
+def updatePasswordView(request):
+    user=CustomUserModel.objects.get(username=request.user.username)
+    fm=PasswordChangeForm(user=user)
+    if request.method=='POST':
+        fm=PasswordChangeForm(user=user,data=request.POST)
+        if fm.is_valid():
+            fm.save()
+            messages.success(request,'Password Changed Successfully')
+            return redirect('signin')
+        messages.error(request,'Invalid Credentials')
+        return redirect('updatepwd')
+    return render(request,'updatepwd.html',{'form':fm})
+        
 
 
 
